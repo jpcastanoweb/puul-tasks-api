@@ -53,7 +53,7 @@ export class TareaService {
     } else {
       return this.tareaRepository.find({
         relations: { usuarios: true },
-        order: { vencimiento: 'ASC' },
+        order: { createdDate: 'ASC' },
       });
     }
   }
@@ -68,10 +68,11 @@ export class TareaService {
     tarea.costoMonetario = updateTareaDto.costoMonetario;
     tarea.id = id;
 
-    tarea.usuarios = updateTareaDto.usuarios.map((id) => ({
-      ...new Usuario(),
-      id,
-    }));
+    if (tarea.usuarios)
+      tarea.usuarios = updateTareaDto.usuarios.map((id) => ({
+        ...new Usuario(),
+        id,
+      }));
 
     return this.tareaRepository.save(tarea);
   }
