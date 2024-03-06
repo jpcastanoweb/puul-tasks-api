@@ -2,15 +2,17 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export type UsuarioRolType = 'administrador' | 'miembro';
 
 export interface UsuarioInterface {
-  id: number;
+  id: UsuarioId;
   nombre: string;
   correo: string;
   rol: UsuarioRolType;
 }
+
+export type UsuarioId = number;
 @Entity()
 export class Usuario {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: UsuarioId;
 
   @Column()
   nombre: string;

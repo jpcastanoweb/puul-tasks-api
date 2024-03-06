@@ -1,34 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  // Param,
+  // Delete,
+  Query,
+} from '@nestjs/common';
 import { TareaService } from './tarea.service';
 import { CreateTareaDto } from './dto/create-tarea.dto';
-import { UpdateTareaDto } from './dto/update-tarea.dto';
+//import { UpdateTareaDto } from './dto/update-tarea.dto';
 
 @Controller('tarea')
 export class TareaController {
   constructor(private readonly tareaService: TareaService) {}
 
   @Post()
-  create(@Body() createTareaDto: CreateTareaDto) {
-    return this.tareaService.create(createTareaDto);
+  createTarea(@Body() createTareaDto: CreateTareaDto) {
+    return this.tareaService.createTarea(createTareaDto);
   }
 
   @Get()
-  findAll() {
-    return this.tareaService.findAll();
+  getTareas(
+    @Query('titulo') titulo?: string,
+    @Query('correo') vencimiento?: Date,
+    @Query('usuario') usuario?: number,
+  ) {
+    return this.tareaService.getTareas({
+      titulo,
+      vencimiento,
+      usuario,
+    });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tareaService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.tareaService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTareaDto: UpdateTareaDto) {
-    return this.tareaService.update(+id, updateTareaDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateTareaDto: UpdateTareaDto) {
+  //   return this.tareaService.update(+id, updateTareaDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tareaService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.tareaService.remove(+id);
+  // }
 }
