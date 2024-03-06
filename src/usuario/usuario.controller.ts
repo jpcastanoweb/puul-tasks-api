@@ -46,10 +46,14 @@ export class UsuarioController {
     @Query('correo') correo?: string,
     @Query('rol') rol?: UsuarioRolType,
   ) {
-    return this.usuarioService.getUsuarios({
-      nombre,
-      correo,
-      rol,
-    });
+    try {
+      return this.usuarioService.getUsuarios({
+        nombre,
+        correo,
+        rol,
+      });
+    } catch (error) {
+      throw new BadRequestException();
+    }
   }
 }

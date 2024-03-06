@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { TareaService } from './tarea.service';
 import { CreateTareaDto } from './dto/create-tarea.dto';
@@ -28,7 +29,11 @@ export class TareaController {
    */
   @Post()
   createTarea(@Body() createTareaDto: CreateTareaDto) {
-    return this.tareaService.createTarea(createTareaDto);
+    try {
+      return this.tareaService.createTarea(createTareaDto);
+    } catch (error) {
+      throw new BadRequestException();
+    }
   }
 
   /**
@@ -49,13 +54,17 @@ export class TareaController {
     @Query('correo') correo?: string,
     @Query('nombre') nombre?: string,
   ) {
-    return this.tareaService.getTareas({
-      titulo,
-      vencimiento,
-      usuario,
-      correo,
-      nombre,
-    });
+    try {
+      return this.tareaService.getTareas({
+        titulo,
+        vencimiento,
+        usuario,
+        correo,
+        nombre,
+      });
+    } catch (error) {
+      throw new BadRequestException();
+    }
   }
 
   /**
@@ -72,7 +81,11 @@ export class TareaController {
     @Param('id', ParseIntPipe) id: TareaId,
     @Body() updateTareaDto: UpdateTareaDto,
   ) {
-    return this.tareaService.updateTarea(id, updateTareaDto);
+    try {
+      return this.tareaService.updateTarea(id, updateTareaDto);
+    } catch (error) {
+      throw new BadRequestException();
+    }
   }
 
   /**
@@ -85,7 +98,11 @@ export class TareaController {
    */
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: TareaId) {
-    return this.tareaService.removeTarea(id);
+    try {
+      return this.tareaService.removeTarea(id);
+    } catch (error) {
+      throw new BadRequestException();
+    }
   }
 
   /**
@@ -97,6 +114,10 @@ export class TareaController {
    */
   @Get('analitica')
   getAnalitica() {
-    return this.tareaService.getAnalitica();
+    try {
+      return this.tareaService.getAnalitica();
+    } catch (error) {
+      throw new BadRequestException();
+    }
   }
 }
