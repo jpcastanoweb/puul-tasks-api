@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTareaDto } from './dto/create-tarea.dto';
 import { AnaliticaInterface, Tarea, TareaId } from './entities/tarea.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ArrayContains, Between, Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Usuario, UsuarioId } from 'src/usuario/entities/usuario.entity';
 import { UpdateTareaDto } from './dto/update-tarea.dto';
 
@@ -45,33 +45,47 @@ export class TareaService {
    * @param queryParams Paramaters to filter Tarea search.
    * @returns List of matching Tareas.
    */
-  getTareas(queryParams: {
+  async getTareas(queryParams: {
     vencimiento: Date;
     titulo: string;
     usuario: UsuarioId;
   }): Promise<Tarea[]> {
     // If there are any filter queries, provide them to the repository .find method.
-    if (queryParams.vencimiento || queryParams.titulo || queryParams.usuario) {
-      return this.tareaRepository.find({
-        relations: {
-          usuarios: true,
-        },
-        where: {
-          vencimiento: queryParams.vencimiento,
-          titulo: queryParams.titulo,
-          usuarios: ArrayContains([queryParams.usuario]),
-        },
-        order: {
-          createdDate: 'ASC',
-        },
-      });
-      // If no filters queries, return all Tareas
-    } else {
-      return this.tareaRepository.find({
-        relations: { usuarios: true },
-        order: { createdDate: 'ASC' },
+
+    console.log('queryParams', queryParams);
+    let results = await this.tareaRepository.find({
+      relations: { usuarios: true },
+      order: { createdDate: 'ASC' },
+    });
+
+    if (queryParams.vencimiento) {
+      console.log('HELLOOO');
+      const searchDate = new Date(queryParams.vencimiento);
+      results = results.filter((tarea: Tarea) => {
+        //console.log(searchDate.getDate(), tarea.vencimiento.getDate());
+        console.log(tarea.vencimiento, searchDate);
+        return (
+          tarea.vencimiento.getMonth() === searchDate.getMonth() &&
+          tarea.vencimiento.getFullYear() === searchDate.getFullYear() &&
+          tarea.vencimiento.getDate() === searchDate.getDate()
+        );
       });
     }
+
+    if (queryParams.titulo) {
+      results = results.filter(
+        (tarea: Tarea) => tarea.titulo === queryParams.titulo,
+      );
+    }
+
+    if (queryParams.usuario) {
+      results = results.filter((tarea: Tarea) => {
+        const usuarioIds = tarea.usuarios.map((u) => u.id);
+        console.log('usuarios', usuarioIds);
+        return usuarioIds.includes(+queryParams.usuario);
+      });
+    }
+    return results;
   }
 
   /**
