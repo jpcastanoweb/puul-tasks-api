@@ -9,6 +9,7 @@ import {
   Put,
   Param,
   ParseIntPipe,
+  Delete,
 } from '@nestjs/common';
 import { TareaService } from './tarea.service';
 import { CreateTareaDto } from './dto/create-tarea.dto';
@@ -46,13 +47,8 @@ export class TareaController {
     return this.tareaService.updateTarea(id, updateTareaDto);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.tareaService.findOne(+id);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.tareaService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: TareaId) {
+    return this.tareaService.removeTarea(id);
+  }
 }

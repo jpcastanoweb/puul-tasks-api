@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTareaDto } from './dto/create-tarea.dto';
-import { Tarea } from './entities/tarea.entity';
+import { Tarea, TareaId } from './entities/tarea.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArrayContains, Repository } from 'typeorm';
 import { UsuarioId } from 'src/usuario/entities/usuario.entity';
@@ -59,7 +59,7 @@ export class TareaService {
     return this.tareaRepository.save(tarea);
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} tarea`;
-  // }
+  removeTarea(id: TareaId) {
+    return this.tareaRepository.delete(id);
+  }
 }
