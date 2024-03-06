@@ -6,9 +6,14 @@ import {
   // Param,
   // Delete,
   Query,
+  Put,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TareaService } from './tarea.service';
 import { CreateTareaDto } from './dto/create-tarea.dto';
+import { UpdateTareaDto } from './dto/update-tarea.dto';
+import { TareaId } from './entities/tarea.entity';
 //import { UpdateTareaDto } from './dto/update-tarea.dto';
 
 @Controller('tarea')
@@ -33,14 +38,17 @@ export class TareaController {
     });
   }
 
+  @Put(':id')
+  updateTarea(
+    @Param('id', ParseIntPipe) id: TareaId,
+    @Body() updateTareaDto: UpdateTareaDto,
+  ) {
+    return this.tareaService.updateTarea(id, updateTareaDto);
+  }
+
   // @Get(':id')
   // findOne(@Param('id') id: string) {
   //   return this.tareaService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateTareaDto: UpdateTareaDto) {
-  //   return this.tareaService.update(+id, updateTareaDto);
   // }
 
   // @Delete(':id')

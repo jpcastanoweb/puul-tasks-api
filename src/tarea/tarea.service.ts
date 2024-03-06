@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTareaDto } from './dto/create-tarea.dto';
-//import { UpdateTareaDto } from './dto/update-tarea.dto';
 import { Tarea } from './entities/tarea.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArrayContains, Repository } from 'typeorm';
 import { UsuarioId } from 'src/usuario/entities/usuario.entity';
+import { UpdateTareaDto } from './dto/update-tarea.dto';
 
 @Injectable()
 export class TareaService {
@@ -29,7 +29,7 @@ export class TareaService {
     vencimiento: Date;
     titulo: string;
     usuario: UsuarioId;
-  }) {
+  }): Promise<Tarea[]> {
     if (queryParams.vencimiento || queryParams.titulo || queryParams.usuario) {
       return this.tareaRepository.find({
         where: {
@@ -46,13 +46,18 @@ export class TareaService {
     }
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} tarea`;
-  // }
-
-  // update(id: number, updateTareaDto: UpdateTareaDto) {
-  //   return `This action updates a #${id} tarea`;
-  // }
+  updateTarea(id: number, updateTareaDto: UpdateTareaDto): Promise<Tarea> {
+    const tarea: Tarea = new Tarea();
+    tarea.titulo = updateTareaDto.titulo;
+    tarea.descripcion = updateTareaDto.descripcion;
+    tarea.estimadoHoras = updateTareaDto.estimadoHoras;
+    tarea.vencimiento = updateTareaDto.vencimiento;
+    tarea.estado = updateTareaDto.estado;
+    tarea.usuarios = updateTareaDto.usuarios;
+    tarea.costoMonetario = updateTareaDto.costoMonetario;
+    tarea.id = id;
+    return this.tareaRepository.save(tarea);
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} tarea`;
