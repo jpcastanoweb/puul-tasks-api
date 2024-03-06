@@ -6,17 +6,19 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { TareaModule } from './tarea/tarea.module';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { Tarea } from './tarea/entities/tarea.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5432,
-      password: '',
-      username: 'juanpablocastano',
+      port: +process.env.DATABASE_PORT,
+      password: process.env.DATABASE_PASSWORD,
+      username: process.env.DATABASE_USERNAME,
       entities: [Usuario, Tarea],
-      database: 'puul-tareas',
+      database: process.env.DATABASE_NAME,
       synchronize: true,
       logging: true,
     }),

@@ -1,73 +1,125 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Proyecto Tareas: Puul
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Desarrollado por: Juan Pablo Castaño
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Descripción
 
-## Description
+API para la gestión de tareas dentro de un equipo, permitiendo la creación de usuarios, la asignación de tareas con fechas de entrega y la manipulación de datos numéricos asociados a las tareas, como estimaciones de tiempo y seguimiento del tiempo invertido.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Instalación
 
-## Installation
+1. Clonar el repositorio
 
-```bash
-$ npm install
-```
+   ```
+   git clone https://github.com/jpcastanoweb/puul-tasks-api.git
+   ```
 
-## Running the app
+2. Moverse al repositorio del API
 
-```bash
-# development
-$ npm run start
+   ```
+   cd puul-tasks-api
+   ```
 
-# watch mode
-$ npm run start:dev
+3. Instalar Dependencias
 
-# production mode
-$ npm run start:prod
-```
+   ```
+   npm install
+   ```
 
-## Test
+4. Crear una nueva base de datos con el nombre de su elección en un servidor de Postgres local
+
+5. Crear archivo env en el directorio con la configuración de Postgres:
+   ```
+   DATABASE_PORT=<POSTGRES SERVER PORT>
+   DATABASE_PASSWORD=<POSTGRES SERVER PASSWORD>
+   DATABASE_USERNAME=<POSTGRES SERVER USERNAME>
+   DATABASE_NAME=<DATABASE NAME>
+   ```
+
+## Correr la aplicación
+
+Para correr la aplicación corra el siguiente command en la terminal adentro del repositorio.
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ npm start
 ```
 
-## Support
+## API
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Endpoints
 
-## Stay in touch
+| HTTP Verbs | Endpoints        | Action                    |
+| ---------- | ---------------- | ------------------------- |
+| POST       | /usuario         | Crear nuevo usuario       |
+| GET        | /usuario         | Listar todos los usuarios |
+| POST       | /tarea           | Crear tarea               |
+| GET        | /tarea           | Listar todas las tareas   |
+| PUT        | /tarea/:id       | Editar tarea con _id_     |
+| DELETE     | /tarea/:id       | Eliminar tarea con _id_   |
+| GET        | /tarea/analitica | Listar analítica          |
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### API: Opciones de Query
 
-## License
+#### GET /usuario
 
-Nest is [MIT licensed](LICENSE).
+| Opcion | Descripción                                                 |
+| ------ | ----------------------------------------------------------- |
+| nombre | Filtro para buscar por nombre                               |
+| correo | Filtro para buscar por correo                               |
+| rol    | Filtro para buscar por rol: "_administrator_" o "_miembro_" |
+
+Ejemplos:
+
+```
+/usuario?rol=administrador
+/usuario?nombre=JuanPablo&correo=jpcastanom@gmail.com
+```
+
+#### GET /tarea
+
+| Opcion      | Descripción                                   |
+| ----------- | --------------------------------------------- |
+| titulo      | Filtro para buscar por título                 |
+| vencimiento | Filtro para buscar por fecha de vencimiento   |
+| usuario     | Filtro para buscar por id de usuario adignado |
+
+Ejemplos:
+
+```
+/tarea?titulo=Tarea1&usuario=4
+```
+
+### API: Campos en _Body_ del request
+
+#### POST /usuario
+
+| Parametro | Tipo   | Descripción                                      |
+| --------- | ------ | ------------------------------------------------ |
+| nombre    | String | Nombre del usuario                               |
+| correo    | String | Correo del usuario                               |
+| rol       | String | Rol del usuario: "_administrator_" o "_miembro_" |
+
+#### POST /tarea
+
+| Parametro      | Tipo            | Descripción                                                |
+| -------------- | --------------- | ---------------------------------------------------------- |
+| título         | String          | Título de la tarea                                         |
+| descripcion    | String          | Descripción de la tarea                                    |
+| estimadoHoras  | Number          | Estimado de horas para cumplimiento                        |
+| vencimiento    | String          | Fecha de vencimiento. Ej. 2024-03-06                       |
+| estado         | String          | Estado de la tarea: "_activa_" o "_terminada_"             |
+| costoMonetario | Number          | Costo monetario de la tarea                                |
+| usuarios       | Array (Numbers) | Arreglo con IDs de usuarios asignados a la tarea Ej. [0,1] |
+
+## Analítica
+
+En el endpoint de analitica decidí implementar las siguientes estadísticas:
+
+1. Cantidad de Tareas Urgentes: Arreglo con tareas con vencimiento en menos de 5 días.
+2. Costo monetario total de tareas activas: Suma del costo monetario de todas las tareas con "estado" de "activa"
+
+Para probar este endpoint utilize la siguiente llamada:
+
+```
+GET /tarea/analitica
+```
