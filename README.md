@@ -77,11 +77,13 @@ Ejemplos:
 
 #### GET /tarea
 
-| Opcion      | Descripción                                   |
-| ----------- | --------------------------------------------- |
-| titulo      | Filtro para buscar por título                 |
-| vencimiento | Filtro para buscar por fecha de vencimiento   |
-| usuario     | Filtro para buscar por id de usuario adignado |
+| Opcion      | Descripción                                    |
+| ----------- | ---------------------------------------------- |
+| titulo      | Filtro para buscar por título                  |
+| vencimiento | Filtro para buscar por fecha de vencimiento    |
+| usuario     | Filtro para buscar por id de usuario adignado  |
+| correo      | Filtro para buscar por correo de algún usuario |
+| nombre      | Filtro para buscar por nombre de algún usuario |
 
 Ejemplos:
 

@@ -46,11 +46,15 @@ export class TareaController {
     @Query('titulo') titulo?: string,
     @Query('vencimiento') vencimiento?: Date,
     @Query('usuario') usuario?: number,
+    @Query('correo') correo?: string,
+    @Query('nombre') nombre?: string,
   ) {
     return this.tareaService.getTareas({
       titulo,
       vencimiento,
       usuario,
+      correo,
+      nombre,
     });
   }
 

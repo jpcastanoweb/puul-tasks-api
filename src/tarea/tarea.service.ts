@@ -49,17 +49,17 @@ export class TareaService {
     vencimiento: Date;
     titulo: string;
     usuario: UsuarioId;
+    correo: string;
+    nombre: string;
   }): Promise<Tarea[]> {
     // If there are any filter queries, provide them to the repository .find method.
 
-    console.log('queryParams', queryParams);
     let results = await this.tareaRepository.find({
       relations: { usuarios: true },
       order: { createdDate: 'ASC' },
     });
 
     if (queryParams.vencimiento) {
-      console.log('HELLOOO');
       const searchDate = new Date(queryParams.vencimiento);
       results = results.filter((tarea: Tarea) => {
         //console.log(searchDate.getDate(), tarea.vencimiento.getDate());
@@ -81,10 +81,24 @@ export class TareaService {
     if (queryParams.usuario) {
       results = results.filter((tarea: Tarea) => {
         const usuarioIds = tarea.usuarios.map((u) => u.id);
-        console.log('usuarios', usuarioIds);
         return usuarioIds.includes(+queryParams.usuario);
       });
     }
+
+    if (queryParams.nombre) {
+      results = results.filter((tarea: Tarea) => {
+        const usuarioNombres = tarea.usuarios.map((u) => u.nombre);
+        return usuarioNombres.includes(queryParams.nombre);
+      });
+    }
+
+    if (queryParams.correo) {
+      results = results.filter((tarea: Tarea) => {
+        const usuarioCorreos = tarea.usuarios.map((u) => u.correo);
+        return usuarioCorreos.includes(queryParams.correo);
+      });
+    }
+
     return results;
   }
 
