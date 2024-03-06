@@ -14,6 +14,14 @@ import { UsuarioRolType } from './entities/usuario.entity';
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
+  /**
+   * POST /usuario
+   *
+   * Create a new Usuario
+   *
+   * @param createUsuarioDto Parameters for creating a new Usuario
+   * @returns
+   */
   @Post()
   create(@Body() createUsuarioDto: CreateUsuarioDto) {
     try {
@@ -23,6 +31,15 @@ export class UsuarioController {
     }
   }
 
+  /**
+   * GET /usuario
+   *
+   * Get all Usuarios or filter by name, email or role
+   * @param nombre Filter by Usuario name
+   * @param correo Filter result by Usuario email address
+   * @param rol Filter by Usuario role
+   * @returns
+   */
   @Get()
   getUsuarios(
     @Query('nombre') nombre?: string,

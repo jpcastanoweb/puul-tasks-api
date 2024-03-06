@@ -20,6 +20,9 @@ export interface TareaInterface {
   createdDate?: Date;
 }
 
+/**
+ * Interface and Types for Analitica Entry Point
+ */
 export interface AnaliticaInterface {
   tareasUrgentes: TareasUrgentes;
   costoTareasActivas: CostoTareasActivas;

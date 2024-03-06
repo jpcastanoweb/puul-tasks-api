@@ -9,11 +9,6 @@ export interface UsuarioInterface {
   rol: UsuarioRolType;
 }
 
-export interface UsuarioEnhanced extends UsuarioInterface {
-  costoTotal: number;
-  tareasTerminadas: number;
-}
-
 export type UsuarioId = number;
 @Entity()
 export class Usuario {
