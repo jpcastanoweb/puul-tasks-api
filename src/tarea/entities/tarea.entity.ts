@@ -19,6 +19,17 @@ export interface TareaInterface {
   costoMonetario: number;
   createdDate?: Date;
 }
+
+export interface AnaliticaInterface {
+  tareasUrgentes: TareasUrgentes;
+  costoTareasActivas: CostoTareasActivas;
+}
+
+type TareasUrgentes = [Tarea[], number];
+type CostoTareasActivas = {
+  costo: number;
+};
+
 @Entity()
 export class Tarea {
   @PrimaryGeneratedColumn()

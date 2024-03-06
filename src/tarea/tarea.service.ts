@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTareaDto } from './dto/create-tarea.dto';
-import { Tarea, TareaId } from './entities/tarea.entity';
+import { AnaliticaInterface, Tarea, TareaId } from './entities/tarea.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ArrayContains, Repository } from 'typeorm';
+import { ArrayContains, Between, Repository } from 'typeorm';
 import { Usuario, UsuarioId } from 'src/usuario/entities/usuario.entity';
 import { UpdateTareaDto } from './dto/update-tarea.dto';
 
@@ -79,5 +79,25 @@ export class TareaService {
 
   removeTarea(id: TareaId) {
     return this.tareaRepository.delete(id);
+  }
+
+  async getAnalitica(): Promise<AnaliticaInterface> {
+    const limitDay = new Date();
+    limitDay.setDate(limitDay.getDate() + 5);
+
+    const analitica: AnaliticaInterface = {
+      tareasUrgentes: await this.tareaRepository.findAndCount({
+        where: {
+          vencimiento: Between(new Date(), limitDay),
+        },
+      }),
+      costoTareasActivas: await this.tareaRepository
+        .createQueryBuilder('tarea')
+        .select('SUM(tarea.costoMonetario)', 'costo')
+        .where('tarea.estado = :estado', { estado: 'activa' })
+        .getRawOne(),
+    };
+
+    return analitica;
   }
 }

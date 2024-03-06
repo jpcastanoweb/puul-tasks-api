@@ -3,8 +3,6 @@ import {
   Get,
   Post,
   Body,
-  // Param,
-  // Delete,
   Query,
   Put,
   Param,
@@ -50,5 +48,10 @@ export class TareaController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: TareaId) {
     return this.tareaService.removeTarea(id);
+  }
+
+  @Get('analitica')
+  getAnalitica() {
+    return this.tareaService.getAnalitica();
   }
 }
