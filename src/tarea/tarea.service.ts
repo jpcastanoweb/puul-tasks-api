@@ -62,8 +62,6 @@ export class TareaService {
     if (queryParams.vencimiento) {
       const searchDate = new Date(queryParams.vencimiento);
       results = results.filter((tarea: Tarea) => {
-        //console.log(searchDate.getDate(), tarea.vencimiento.getDate());
-        console.log(tarea.vencimiento, searchDate);
         return (
           tarea.vencimiento.getMonth() === searchDate.getMonth() &&
           tarea.vencimiento.getFullYear() === searchDate.getFullYear() &&
