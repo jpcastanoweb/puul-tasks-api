@@ -1,5 +1,11 @@
-import { UsuarioId } from 'src/usuario/entities/usuario.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export type TareaId = number;
 export interface TareaInterface {
@@ -9,8 +15,9 @@ export interface TareaInterface {
   estimadoHoras: number;
   vencimiento: Date;
   estado: string;
-  usuarios: UsuarioId[];
+  usuarios: Usuario[];
   costoMonetario: number;
+  createdDate?: Date;
 }
 @Entity()
 export class Tarea {
@@ -36,9 +43,13 @@ export class Tarea {
   })
   estado: string;
 
-  @Column('int', { array: true })
-  usuarios: UsuarioId[];
+  @ManyToMany(() => Usuario, (Usuario) => Usuario.tareas)
+  @JoinTable()
+  usuarios: Usuario[];
 
   @Column()
   costoMonetario: number;
+
+  @Column()
+  createdDate?: Date;
 }

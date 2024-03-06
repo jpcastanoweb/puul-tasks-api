@@ -3,7 +3,7 @@ import { CreateTareaDto } from './dto/create-tarea.dto';
 import { Tarea, TareaId } from './entities/tarea.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArrayContains, Repository } from 'typeorm';
-import { UsuarioId } from 'src/usuario/entities/usuario.entity';
+import { Usuario, UsuarioId } from 'src/usuario/entities/usuario.entity';
 import { UpdateTareaDto } from './dto/update-tarea.dto';
 
 @Injectable()
@@ -20,8 +20,14 @@ export class TareaService {
     newTarea.estimadoHoras = createTareaDto.estimadoHoras;
     newTarea.vencimiento = createTareaDto.vencimiento;
     newTarea.estado = createTareaDto.estado;
-    newTarea.usuarios = createTareaDto.usuarios;
     newTarea.costoMonetario = createTareaDto.costoMonetario;
+    newTarea.createdDate = new Date();
+
+    newTarea.usuarios = createTareaDto.usuarios.map((id) => ({
+      ...new Usuario(),
+      id,
+    }));
+
     return this.tareaRepository.save(newTarea);
   }
 
@@ -32,17 +38,23 @@ export class TareaService {
   }): Promise<Tarea[]> {
     if (queryParams.vencimiento || queryParams.titulo || queryParams.usuario) {
       return this.tareaRepository.find({
+        relations: {
+          usuarios: true,
+        },
         where: {
           vencimiento: queryParams.vencimiento,
           titulo: queryParams.titulo,
           usuarios: ArrayContains([queryParams.usuario]),
         },
         order: {
-          vencimiento: 'ASC',
+          createdDate: 'ASC',
         },
       });
     } else {
-      return this.tareaRepository.find({ order: { vencimiento: 'ASC' } });
+      return this.tareaRepository.find({
+        relations: { usuarios: true },
+        order: { vencimiento: 'ASC' },
+      });
     }
   }
 
@@ -53,9 +65,14 @@ export class TareaService {
     tarea.estimadoHoras = updateTareaDto.estimadoHoras;
     tarea.vencimiento = updateTareaDto.vencimiento;
     tarea.estado = updateTareaDto.estado;
-    tarea.usuarios = updateTareaDto.usuarios;
     tarea.costoMonetario = updateTareaDto.costoMonetario;
     tarea.id = id;
+
+    tarea.usuarios = updateTareaDto.usuarios.map((id) => ({
+      ...new Usuario(),
+      id,
+    }));
+
     return this.tareaRepository.save(tarea);
   }
 

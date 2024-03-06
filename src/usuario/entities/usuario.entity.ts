@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Tarea } from 'src/tarea/entities/tarea.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 export type UsuarioRolType = 'administrador' | 'miembro';
 
 export interface UsuarioInterface {
@@ -26,4 +27,7 @@ export class Usuario {
     default: 'miembro',
   })
   rol: UsuarioRolType;
+
+  @ManyToMany(() => Tarea, (Tarea) => Tarea.usuarios)
+  tareas: Tarea[];
 }

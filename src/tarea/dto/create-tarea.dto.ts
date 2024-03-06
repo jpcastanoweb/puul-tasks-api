@@ -6,6 +6,6 @@ export class CreateTareaDto {
   estimadoHoras: number;
   vencimiento: Date;
   estado: string;
-  usuarios: UsuarioId[];
   costoMonetario: number;
+  usuarios: UsuarioId[];
 }
