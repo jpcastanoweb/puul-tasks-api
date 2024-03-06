@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioModule } from './usuario/usuario.module';
 import { TareaModule } from './tarea/tarea.module';
+import { Usuario } from './usuario/entities/usuario.entity';
+import { Tarea } from './tarea/entities/tarea.entity';
 
 @Module({
   imports: [
@@ -13,7 +15,7 @@ import { TareaModule } from './tarea/tarea.module';
       port: 5432,
       password: '',
       username: 'juanpablocastano',
-      entities: [],
+      entities: [Usuario, Tarea],
       database: 'puul-tareas',
       synchronize: true,
       logging: true,

@@ -1,7 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  BadRequestException,
+  Query,
+} from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { UsuarioRolType } from './entities/usuario.entity';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -9,26 +16,33 @@ export class UsuarioController {
 
   @Post()
   create(@Body() createUsuarioDto: CreateUsuarioDto) {
-    return this.usuarioService.create(createUsuarioDto);
+    try {
+      return this.usuarioService.createUsuario(createUsuarioDto);
+    } catch (error) {
+      throw new BadRequestException();
+    }
   }
 
   @Get()
-  findAll() {
-    return this.usuarioService.findAll();
-  }
+  getUsuarios(
+    @Query('nombre') nombre?: string,
+    @Query('correo') correo?: string,
+    @Query('rol') rol?: UsuarioRolType,
+  ) {
+    console.log('nombre', nombre);
+    console.log('correo', correo);
+    console.log('rol', rol);
+    if ((nombre || correo) && rol)
+      throw new BadRequestException(
+        'Puedes solo buscar por nombre y/o correo o por rol',
+      );
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usuarioService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
-    return this.usuarioService.update(+id, updateUsuarioDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usuarioService.remove(+id);
+    if (nombre || correo)
+      return this.usuarioService.getUsuariosByNombreOrCorreo({
+        nombre,
+        correo,
+      });
+    else if (rol) return this.usuarioService.getUsuariosByRol(rol);
+    else return this.usuarioService.getUsuarios();
   }
 }
